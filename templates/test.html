@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            test
+        </title>
+        <script>
+	        function getStatus(){
+                var webSocket = window.WebSocket || window.MozWebSocket;
+                var web_socket;
+                if(webSocket){
+                    try {
+                        web_socket = new WebSocket("ws://" + "127.0.0.1" + ":8000/websocket_status");
+                    } catch (e) {
+                        alert("提示","WebSocket连接失败.");
+                    }
+                    web_socket.onopen = function(event) {
+                        // 监听消息
+                        web_socket.onmessage = function(evt){
+                            alert(evt.data)
+                        };
+                        // 监听Socket的关闭
+                        web_socket.onclose = function(event) { 
+                            web_socket.close() 
+                            alert("close")
+                        }; 
+                    };
+                }else{
+                    alert("提示","当前浏览器不支持WebSocket.请更换浏览器，否则功能将不可用");
+                    return;
+                }
+            }
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
