@@ -2,6 +2,35 @@
 <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script>
+	function trim(s){ 
+	    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+	}
+
+	function del(){
+	    del_name = trim(document.getElementById("del_name").value)
+	    if (del_name == ""){
+		//alert("请输入姓名")
+	        return false
+	    }
+	    return true
+	}
+
+	function add(){
+	    add_name = trim(document.getElementById("add_name").value)
+	    add_price = trim(document.getElementById("add_price").value)
+	    if (add_name == ""){
+		//alert("请输入姓名")
+	        return false
+	    }
+	    if (add_price == ""){
+		//alert("请输入菜名")
+	        return false
+	    }
+	    return true
+	}
+    
+    </script>
     </head>
     <body>
 
@@ -18,16 +47,16 @@
     <hr color=#aaaaaa >
 </div>
 
-<form action="/addc" method="post">
+<form action="/addc" onsubmit="return add()" method="post">
     <p>增加或编辑一个菜</p>
-    <p>菜名: <input type="text" name="name" /></p>
-    <p>价格: <input type="text" name="price" /></p>
+    <p>菜名: <input type="text" name="name" id="add_name" /></p>
+    <p>价格: <input type="text" name="price" id="add_price"/></p>
     <input type="submit" value="Submit" />
 </form>
 <hr color=#222222 >
-<form action="/delc" method="post">
+<form action="/delc" onsubmit="return del()" method="post">
     <p>删除一个菜</p>
-    <p>菜名: <input type="text" name="name" /></p>
+    <p>菜名: <input type="text" name="name" id="del_name" /></p>
     <input type="submit" value="Submit" />
 </form>
 
