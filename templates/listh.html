@@ -13,21 +13,14 @@
 <div class="qingdan">
     <hr color=#aaaaaa >
     <pre>
-    {{ c_str }}
+    {{ h_str }}
     </pre> 
     <hr color=#aaaaaa >
 </div>
 
-<form action="/addc" method="post">
-    <p>增加或编辑一个菜</p>
-    <p>菜名: <input type="text" name="name" /></p>
-    <p>价格: <input type="text" name="price" /></p>
-    <input type="submit" value="Submit" />
-</form>
-<hr color=#222222 >
-<form action="/delc" method="post">
-    <p>删除一个菜</p>
-    <p>菜名: <input type="text" name="name" /></p>
+<form action="/history" method="post">
+    <p>输入日期名称,格式(1970-01-01)</p>
+    <p>日期: <input type="text" name="d_str" /></p>
     <input type="submit" value="Submit" />
 </form>
 

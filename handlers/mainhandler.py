@@ -32,6 +32,7 @@ class Application(tornado.web.Application):
             (r"/addc", AddCaiHandler),
             (r"/delc", DelCaiHandler),
             (r"/listc", ListCaiHandler),
+            (r"/history", HistoryHandler),
 	    
 	    (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler, dict(path=STATIC_PATH)),
         ]
@@ -113,11 +114,32 @@ class ListCaiHandler(tornado.web.RequestHandler):
         self.render("listc.html", c_list=c_list, c_str=c_str)
 
 
+class HistoryHandler(tornado.web.RequestHandler):
+    def get(self):
+        h_list, h_str = back_history_list("1970-01-01")
+	self.render("listh.html", h_list=h_list, h_str=h_str)
+    
+    def post(self):
+        d_str = self.get_argument("d_str")
+        h_list, h_str = back_history_list(d_str)
+	self.render("listh.html", h_list=h_list, h_str=h_str)
+
+
 class TongJiHandler(tornado.web.RequestHandler):
     def get(self):
-        self.set_secure_cookie("user", "")
-        #self.redirect("login")
-        self.render("login.html")
+	self.redirect('/listc')
+
+
+def back_history_list(d_str):
+	h_json = {} 
+	h_str = ""
+	file_name = allset.data_dir + d_str
+	if os.path.exists(file_name):
+	    fd = open(file_name, "r")
+	    h_str = fd.read()
+	    fd.close()
+	    h_json = json.loads(h_str, encoding="utf-8")
+	return (h_json, h_str)
 
 
 def back_cai_list():
