@@ -1,0 +1,3 @@
+/cloud/log/files/*.log
+/cloud/log/files/*.log.*
+*.pyc
