@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from handlers.qhandler import main
+from handlers.mainhandler import main
 from log import logger
 
 
