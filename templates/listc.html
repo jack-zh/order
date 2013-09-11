@@ -1,74 +1,102 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script>
-	function trim(s){ 
-	    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
-	}
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script>
+	    function trim(s){ 
+		return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+	    }
 
-	function del(){
-	    del_name = trim(document.getElementById("del_name").value)
-	    if (del_name == ""){
-		//alert("请输入姓名")
-	        return false
+	    function del(){
+		del_name = trim(document.getElementById("del_name").value)
+		if (del_name == ""){
+		    //alert("请输入姓名")
+		    return false
+		}
+		return true
 	    }
-	    return true
-	}
 
-	function add(){
-	    add_name = trim(document.getElementById("add_name").value)
-	    add_price = trim(document.getElementById("add_price").value)
-	    if (add_name == ""){
-		//alert("请输入姓名")
-	        return false
+	    function add(){
+		add_name = trim(document.getElementById("add_name").value)
+		add_price = trim(document.getElementById("add_price").value)
+		if (add_name == ""){
+		    //alert("请输入姓名")
+		    return false
+		}
+		if (add_price == ""){
+		    //alert("请输入菜名")
+		    return false
+		}
+		return true
 	    }
-	    if (add_price == ""){
-		//alert("请输入菜名")
-	        return false
-	    }
-	    return true
-	}
-    
-    </script>
+
+	</script>
     </head>
     <body>
 
-<div class="header">
-    <hr color=#777777 >
-    <p>OV-ORANGE简易点餐系统</p>
-    <hr color=#777777 >
-</div>
-<div class="qingdan">
-    <hr color=#aaaaaa >
-    <pre>
+	<div class="header">
+	    <hr color=#777777 >
+	    <p>OV-ORANGE简易点餐系统</p>
+	    <hr color=#777777 >
+	</div>
+	<div class="qingdan">
+	    <hr color=#aaaaaa >
+	    <table border="5">
+		<tr>
+		    <th>
+			<pre>
     {{ c_str }}
     </pre> 
-    <hr color=#aaaaaa >
-</div>
+		    </th>
+		</tr>
+	    </table>
+	    <hr color=#aaaaaa >
+	</div>
+	<table border=5>
+	    <tr>
+		<td>
+		    <form action="/addc" onsubmit="return add()" method="post">
 
-<form action="/addc" onsubmit="return add()" method="post">
-    <p>增加或编辑一个菜</p>
-    <p>菜名: <input type="text" name="name" id="add_name" /></p>
-    <p>价格: <input type="text" name="price" id="add_price"/></p>
-    <input type="submit" value="Submit" />
-</form>
-<hr color=#222222 >
-<form action="/delc" onsubmit="return del()" method="post">
-    <p>删除一个菜</p>
-    <p>菜名: <input type="text" name="name" id="del_name" /></p>
-    <input type="submit" value="Submit" />
-</form>
+			<table>
+			    <tr>
+				<th>
+				    <p>增加或编辑一个菜</p></th></tr>
+			    <tr><td>
+				    <p>菜名: <input type="text" name="name" id="add_name" /></p>
+				    </td></tr><tr><td>
+				    <p>价格: <input type="text" name="price" id="add_price"/></p>
+				    </td></tr><tr><td>
+				    <input type="submit" value="Submit" />
+			</td></tr></table>
+		    </form>
+		    </td >
+		    <td>
+			<form action="/delc" onsubmit="return del()" method="post">
+			    <table>
+				<tr>
+				    <th>
+					<p>删除一个菜</p>
+					</th></tr><tr><td>
+					<p>菜名: <input type="text" name="name" id="del_name" /></p>
+					</td></tr><tr><td>
+					<p>&nbsp;</p>
+					</td></tr><tr><td>
+					<input type="submit" value="Submit" />
+			    </td></tr></table>
+			</form>
 
-<hr color=#222222 >
-<p><a href="/">点餐</a><span>--</span><a href="/listc">编辑菜谱</a><span>--</span><a href="/history">历史点餐信息</a></p>
+		    </td>
+		</tr>
+	    </table>
+	    <hr color=#222222 >
+	    <p><a href="/">点餐</a><span>--</span><a href="/listc">编辑菜谱</a><span>--</span><a href="/history">历史点餐信息</a></p>
 
 
-<div class="footer">
-    <hr color=#777777 >
-    <p>Copyright 2013  光谷奥源公司-jack-zh 版权所有 </p>
-    <hr color=#777777 >
-</div>
+	    <div class="footer">
+		<hr color=#777777 >
+		<p>Copyright 2013  光谷奥源公司-jack-zh 版权所有 </p>
+		<hr color=#777777 >
+	    </div>
 
-</body>
-</html>
+	</body>
+    </html>

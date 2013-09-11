@@ -1,18 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	</style>
-	<script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    </style>
+    <script>
 	function trim(s){ 
 	    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
 	}
 	function del(){
-	
+
 	    del_name = trim(document.getElementById("del_name").value)
 	    if (del_name == ""){
 		//alert("请输入姓名")
-	        return false
+		return false
 	    }
 	    return true
 	}
@@ -22,63 +22,95 @@
 	    add_cai = trim(document.getElementById("add_cai").value)
 	    if (add_name == ""){
 		//alert("请输入姓名")
-	        return false
+		return false
 	    }
 	    if (add_cai == ""){
 		//alert("请输入菜名")
-	        return false
+		return false
 	    }
 	    return true
 	}
-    
-    
+
+
     </script>
-    </head>
-    <body>
+</head>
+<body>
 
-<div class="header">
-    <hr color=#777777 >
-    <p>OV-ORANGE简易点餐系统</p>
-    <hr color=#777777 >
-</div>
+    <div class="header">
+	<hr color=#777777 >
+	<h2><strong>OV-ORANGE简易点餐系统</strong></h2>
+	<hr color=#777777 >
+    </div>
 
-<table border="5">
-    <tr>
-    <td>
-    <span>菜谱：</span>
+    <table border="5">
+	<tr>
+	    <th>菜谱</th>
+	    <th>今日点餐情况</th>
+	</tr>
+	<tr>
+	    <td>
     <pre>{{ c_str }}</pre>
-    </td>
-    <td>
-    <span>今日点餐情况：</span>
+	    </td>
+	    <td>
     <pre>{{ t_str }}</pre>
-    </td>
-</tr>
-</table>
+	    </td>
+	</tr>
+    </table>
 
-<hr color=#777777 >
-
-<form action="/" onsubmit="return add()" method="post">
-    <p>点餐</p>
-    <p>姓名: <input type="text" name="name" id="add_name" /></p>
-    <p>菜名: <input type="text" name="wcai" id="add_cai"/></p>
-    <input type="submit" value="Submit" />
-</form>
-
-<hr color=#aaaaaa >
-<form action="/del" onsubmit="return del()" method="post">
-    <p>删除点餐</p>
-    <p>姓名: <input type="text" name="name" id="del_name" /></p>
-    <input type="submit" value="Submit" />
-</form>
-
-<hr color=#777777 >
-<p><a href="/">点餐</a><span>--</span><a href="/listc">编辑菜谱</a><span>--</span><a href="/history">历史点餐信息</a></p>
-
-<div class="footer">
     <hr color=#777777 >
-    <p>Copyright 2013  光谷奥源公司-jack-zh 版权所有 </p>
+
+    <table border="5">
+	<tr>
+	    <td>
+		<form action="/" onsubmit="return add()" method="post">
+		    <table>
+			<tr>
+			    <th><p>点餐</p></th>
+			</tr>
+
+			<tr>
+			    <td><p>姓名: <input type="text" name="name" id="add_name" /></p></td>
+			</tr>
+			<tr>
+			    <td><p>菜名: <input type="text" name="wcai" id="add_cai"/></p></td>
+			</tr>
+			<tr>
+			    <td><input type="submit" value="Submit" /></td>
+			</tr>
+		    </table>
+		</form>
+	    </td>
+	    <td>
+		<form action="/del" onsubmit="return del()" method="post">
+		    <table>
+			<tr>
+			    <th><p>删除点餐</p></th>
+			</tr>
+
+			<tr>
+			    <td><p>姓名: <input type="text" name="name" id="del_name" /></p></td>
+			</tr>
+			<tr>
+			    <td><p>&nbsp;</p></td>
+			</tr>
+			<tr>
+			    <td><input type="submit" value="Submit" /></td>
+			</tr>
+		    </table>
+		</form>
+	    </td>
+	</tr>
+    </table>
+
+
     <hr color=#777777 >
-</div>
+    <p><a href="/">点餐</a><span>--</span><a href="/listc">编辑菜谱</a><span>--</span><a href="/history">历史点餐信息</a></p>
+
+    <div class="footer">
+	<hr color=#777777 >
+	<p>Copyright 2013  光谷奥源公司-jack-zh 版权所有 </p>
+	<hr color=#777777 >
+    </div>
 
 </body>
 </html>
