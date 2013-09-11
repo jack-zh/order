@@ -10,36 +10,29 @@
     <p>OV-ORANGE简易点餐系统</p>
     <hr color=#777777 >
 </div>
+<div class="qingdan">
+    <hr color=#aaaaaa >
+    <pre>
+    {{ c_str }}
+    </pre> 
+    <hr color=#aaaaaa >
+</div>
 
-<table border="5">
-    <tr>
-    <td>
-    <span>菜谱：</span>
-    <pre>{{ c_str }}</pre>
-    </td>
-    <td>----------</td>
-    <td>
-    <span>今日点餐情况：</span>
-    <pre>{{ t_str }}</pre>
-    </td>
-</tr>
-</table>
-
-<form action="/" method="post">
-    <p>点餐</p>
-    <p>姓名: <input type="text" name="name" /></p>
-    <p>菜名: <input type="text" name="wcai" /></p>
+<form action="/addc" method="post">
+    <p>增加或编辑一个菜</p>
+    <p>菜名: <input type="text" name="name" /></p>
+    <p>价格: <input type="text" name="price" /></p>
     <input type="submit" value="Submit" />
 </form>
-
-<hr color=#aaaaaa >
-<form action="/del" method="post">
-    <p>删除点餐</p>
-    <p>姓名: <input type="text" name="name" /></p>
+<hr color=#222222 >
+<form action="/delc" method="post">
+    <p>删除一个菜</p>
+    <p>菜名: <input type="text" name="name" /></p>
     <input type="submit" value="Submit" />
 </form>
 
 <p><a href="/">点餐</a><span>----</span><a href="/listc">编辑菜谱</a></p>
+
 
 <div class="footer">
     <hr color=#777777 >

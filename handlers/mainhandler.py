@@ -24,12 +24,16 @@ STATIC_PATH = os.path.join(os.path.dirname(__file__), "../static")
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r"/editC", EditCaiHandler),
             (r"/", MainHandler),
             (r"/today", TodayHandler),
             (r"/del", DelHandler),
             (r"/tongji", TongJiHandler),
-            (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler, dict(path=STATIC_PATH)),
+            
+            (r"/addc", AddCaiHandler),
+            (r"/delc", DelCaiHandler),
+            (r"/listc", ListCaiHandler),
+	    
+	    (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler, dict(path=STATIC_PATH)),
         ]
         settings = dict(
             template_path=TEMPLATE_PATH,
@@ -37,6 +41,102 @@ class Application(tornado.web.Application):
             debug=True
         )
         tornado.web.Application.__init__(self, handlers, **settings)
+
+
+
+class TodayHandler(tornado.web.RequestHandler):
+    def get(self):
+	self.redirect('/')
+
+
+class DelHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("del.html")
+
+    def post(self):
+        name = self.get_argument("name")
+	j, s = back_today_json()
+	for c in j:
+	    if name in j[c]:
+	        j[c].remove(name)
+		if len(j[c]) == 0:
+		    j.pop(c)
+		    break
+	write_today_json(j)
+	self.redirect('/')
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+	c_list, c_str = back_cai_list()
+	t_list, t_str = back_today_json()
+        self.render("index.html", c_str=c_str, t_str=t_str)
+
+    def post(self):
+        j, s = back_today_json()
+        name = self.get_argument("name")
+        wcai = self.get_argument("wcai")
+        if wcai in j:
+	    j[wcai].append(name)
+	else:
+	    j[wcai] = [name]
+
+	write_today_json(j)
+	c_list, c_str = back_cai_list()
+	t_list, t_str = back_today_json()
+        self.render("index.html", c_str=c_str, t_str=t_str)
+
+
+class AddCaiHandler(tornado.web.RequestHandler):
+    def post(self):
+	c_list, c_str = back_cai_list()
+        name = self.get_argument("name")
+        price = self.get_argument("price")
+	c_list[name] = price
+	write_cai_list(c_list)
+	self.redirect('/listc')
+
+
+class DelCaiHandler(tornado.web.RequestHandler):
+    def post(self):
+	c_list, c_str = back_cai_list()
+        name = self.get_argument("name")
+	if name in c_list:
+	    del(c_list[name])
+	    write_cai_list(c_list)
+	self.redirect('/listc')
+
+
+class ListCaiHandler(tornado.web.RequestHandler):
+    def get(self):
+	c_list, c_str = back_cai_list()
+        self.render("listc.html", c_list=c_list, c_str=c_str)
+
+
+class TongJiHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_secure_cookie("user", "")
+        #self.redirect("login")
+        self.render("login.html")
+
+
+def back_cai_list():
+	c_json = {} 
+	c_str = ""
+	file_name = allset.data_dir + "clist.json"
+	if os.path.exists(file_name):
+	    fd = open(file_name, "r")
+	    c_str = fd.read()
+	    fd.close()
+	    c_json = json.loads(c_str, encoding="utf-8")
+	return (c_json, c_str)
+
+
+def write_cai_list(j):
+	file_name = allset.data_dir + "clist.json"
+	fd = open(file_name, "wt")
+	fd.write(json.dumps(j, indent=1, ensure_ascii=False))
+	fd.close()
 
 
 def back_today_json():
@@ -58,65 +158,6 @@ def write_today_json(j):
 	fd = open(file_name, "wt")
 	fd.write(json.dumps(j, indent=1, ensure_ascii=False))
 	fd.close()
-
-
-class TodayHandler(tornado.web.RequestHandler):
-    def get(self):
-        j, s = back_today_json()
-	self.render("today.html", day_json=s)
-
-
-class DelHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("del.html")
-
-    def post(self):
-        name = self.get_argument("name")
-	j, s = back_today_json()
-	for c in j:
-	    if name in j[c]:
-	        j[c].remove(name)
-		if len(j[c]) == 0:
-		    j.pop(c)
-		    break
-	write_today_json(j)
-	self.redirect('/today')
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html")
-
-    def post(self):
-        j, s = back_today_json()
-        name = self.get_argument("name")
-        wcai = self.get_argument("wcai")
-        if wcai in j:
-	    j[wcai].append(name)
-	else:
-	    j[wcai] = [name]
-
-	write_today_json(j)
-        self.render("index.html")
-
-
-class EditCaiHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.set_secure_cookie("user", "")
-        self.set_secure_cookie("superuser", "")
-        self.render("login.html")
-
-    def post(self):
-        db = self.application.db
-        user = self.get_argument("user")
-        password = self.get_argument("password")
-
-
-class TongJiHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.set_secure_cookie("user", "")
-        #self.redirect("login")
-        self.render("login.html")
 
 
 def main():
