@@ -56,7 +56,6 @@ class DelHandler(tornado.web.RequestHandler):
 
     def post(self):
         name = self.get_argument("name")
-	print name
 	j, s = back_today_json()
 	for c in j.keys():
 	    df = False
