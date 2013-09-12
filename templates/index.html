@@ -114,14 +114,18 @@
 		  <tr>
 		      <th>菜名</th>
 		      <th>人数</th>
+		      <th>单价</th>
+		      <th>总价</th>
 		      <th>WHO列表</th>
 		  </tr>
 		  {% for  t in t_list %}
 		  <tr>
 		      <td>{{ t }}</td>
-		      <td>{{ len(t_list[t]) }}份</td>
+		      <td>{{ len(t_list[t]['who']) }}份</td>
+		      <td>{{ t_list[t]['price'] }}</td>
+		      <td>{{ t_list[t]['allp'] }}</td>
 		      <td>
-         	      {% for  p in t_list[t] %}
+         	      {% for  p in t_list[t]['who'] %}
                        {{ p }}<span style="color:#ffffff">|</span>
 		      {% end %}
 		      </td>

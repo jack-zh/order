@@ -85,13 +85,38 @@ class MainHandler(tornado.web.RequestHandler):
         wcai = self.get_argument("wcai")
         time_str = time.strftime('-%H:%M:%S', time.localtime(int(time.time())))
         name = name + time_str
+        c_list, c_str = back_cai_list()
         if wcai in j:
-            j[wcai].append(name)
+            j[wcai]['who'].append(name)
+	    if wcai in c_list:
+		price = 0
+		try:
+		    price = int(c_list[wcai].split(u"元")[0])
+                except Exception, e:
+		    print e
+		    price = 0
+		j[wcai]['price'] = price
+	    else:
+		j[wcai]['price'] = 0
+	    j[wcai]['allp'] = len(j[wcai]['who']) * j[wcai]['price']
         else:
-            j[wcai] = [name]
+            j[wcai] = {}
+	    if wcai in c_list:
+		price = 0
+		try:
+		    price = int(c_list[wcai].split(u"元")[0])
+                except Exception, e:
+		    print e
+		    price = 0
+		j[wcai]['price'] = price
+		j[wcai]['allp'] = price
+	    else:
+		j[wcai]['price'] = 0
+		j[wcai]['allp'] = price
+
+	    j[wcai]['who'] = [name]
 
         write_today_json(j)
-        c_list, c_str = back_cai_list()
         t_list, t_str = back_today_json()
         self.render("index.html", c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list)
 
