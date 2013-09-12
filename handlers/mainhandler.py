@@ -57,18 +57,13 @@ class DelHandler(tornado.web.RequestHandler):
         _a, s = back_today_json()
         if "dallp" in _a:
             j = _a["cai"]
-        
+
         for c in j.keys():
             df = False
             for n in j[c]["who"]:
                 xf = False
                 if name == n[:len(name)]:
-	            price = 0
-	            if c in c_list:
-		        try:
-		            price = int(c_list[c].split(u"元")[0])
-                        except Exception, e:
-		            print e
+                    price = get_price(c_list, c)
                     j[c]["allp"] = j[c]["allp"] - price
 
                     xf = True
@@ -96,7 +91,7 @@ class MainHandler(tornado.web.RequestHandler):
         else:
             dallp = t_list['dallp']
             cai = t_list["cai"]
-        self.render("index.html",dallp=dallp, c_str=c_str, t_str=t_str, c_list=c_list, t_list=cai)
+        self.render("index.html", dallp=dallp, c_str=c_str, t_str=t_str, c_list=c_list, t_list=cai)
 
     def post(self):
         _a, s = back_today_json()
@@ -106,51 +101,25 @@ class MainHandler(tornado.web.RequestHandler):
         name = name + time_str
         c_list, c_str = back_cai_list()
         if "dallp" in _a:
-	    price = 0
+            price = 0
             j = _a["cai"]
             if wcai in j:
                 j[wcai]['who'].append(name)
-	        if wcai in c_list:
-		    price = 0
-		    try:
-		        price = int(c_list[wcai].split(u"元")[0])
-                    except Exception, e:
-		        print e
-		        price = 0
-		    j[wcai]['price'] = price
-	        else:
-		    j[wcai]['price'] = 0
-	        j[wcai]['allp'] = len(j[wcai]['who']) * j[wcai]['price']
+                price = get_price(c_list, wcai)
+                j[wcai]['price'] = price
+                j[wcai]['allp'] = len(j[wcai]['who']) * j[wcai]['price']
             else:
-                j[wcai] = {}
-	        if wcai in c_list:
-		    price = 0
-		    try:
-		        price = int(c_list[wcai].split(u"元")[0])
-                    except Exception, e:
-		        print e
-		        price = 0
-		    j[wcai]['price'] = price
-		    j[wcai]['allp'] = price
-	        else:
-		    j[wcai]['price'] = 0
-		    j[wcai]['allp'] = price
+                price = get_price(c_list, wcai)
+                j[wcai] = {"price": price, "allp": price, "who": [name]}
 
-	        j[wcai]['who'] = [name]
-            _a["dallp"] = _a["dallp"] + price 
+            _a["dallp"] = _a["dallp"] + price
         else:
-	    price = 0
-	    if wcai in c_list:
-		try:
-		    price = int(c_list[wcai].split(u"元")[0])
-                except Exception, e:
-		    print e
-		    price = 0
-            _a = {"dallp":price, "cai":{wcai:{"price":price, "allp":price, "who":[name]}}}
+            price = get_price(c_list, wcai)
+            _a = {"dallp": price, "cai": {wcai: {"price": price, "allp": price, "who": [name]}}}
 
         write_today_json(_a)
         t_list, t_str = back_today_json()
-        self.render("index.html",dallp=t_list["dallp"], c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list["cai"])
+        self.render("index.html", dallp=t_list["dallp"], c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list["cai"])
 
 
 class AddCaiHandler(tornado.web.RequestHandler):
@@ -186,8 +155,8 @@ class HistoryHandler(tornado.web.RequestHandler):
             cai = h_list["cai"]
             dallp = h_list["dallp"]
         else:
-            cai = {}#h_list["cai"]
-            dallp = 0#h_list["dallp"]
+            cai = {}
+            dallp = 0
 
         self.render("listh.html", h_list=cai, dallp=dallp, h_str=h_str)
 
@@ -198,8 +167,8 @@ class HistoryHandler(tornado.web.RequestHandler):
             cai = h_list["cai"]
             dallp = h_list["dallp"]
         else:
-            cai = {}#h_list["cai"]
-            dallp = 0#h_list["dallp"]
+            cai = {}
+            dallp = 0
 
         self.render("listh.html", h_list=cai, dallp=dallp, h_str=h_str)
 
@@ -259,6 +228,17 @@ def write_today_json(j):
         fd = open(file_name, "wt")
         fd.write(json.dumps(j, indent=1, ensure_ascii=False))
         fd.close()
+
+
+def get_price(c_list, wcai):
+    price = 0
+    price = 0
+    if wcai in c_list:
+        try:
+            price = int(c_list[wcai].split(u"元")[0])
+        except Exception, e:
+            price = 0
+    return price
 
 
 def main():
