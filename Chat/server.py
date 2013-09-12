@@ -10,12 +10,21 @@ clients = []
 def server_run(cli, addr, name):
     global clients
     while True:
-        data = cli.recv(1024)
-        if not data:
-            cli.close()
-            # 当存在断开的客户端的时候 从cclients里面把其移除
-            clients.remove((cli, addr, name))
+        try:
+            data = cli.recv(1024)
+            if not data:
+                # 当存在断开的客户端的时候 从cclients里面把其移除
+                clients.remove((cli, addr, name))
+                cli.close()
 
+                # 移除之后 通知其他客户端，他的离开
+                for c in clients:
+                    c[0].send(name + " is out!")
+                break
+        except Exception, e:
+            print e
+            clients.remove((cli, addr, name))
+            cli.close()
             # 移除之后 通知其他客户端，他的离开
             for c in clients:
                 c[0].send(name + " is out!")
