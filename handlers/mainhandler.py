@@ -56,13 +56,23 @@ class DelHandler(tornado.web.RequestHandler):
 
     def post(self):
         name = self.get_argument("name")
+	print name
 	j, s = back_today_json()
-	for c in j:
-	    if name in j[c]:
-	        j[c].remove(name)
-		if len(j[c]) == 0:
-		    j.pop(c)
+	for c in j.keys():
+	    df = False
+	    for n in j[c]:
+		xf = False
+		if name == n[:len(name)]:
+		    xf = True
+		    df = True
+	            j[c].remove(n)
+		    if len(j[c]) == 0:
+		        j.pop(c)
+		if xf:
 		    break
+	    if df:
+		break
+	
 	write_today_json(j)
 	self.redirect('/')
 
@@ -77,6 +87,8 @@ class MainHandler(tornado.web.RequestHandler):
         j, s = back_today_json()
         name = self.get_argument("name")
         wcai = self.get_argument("wcai")
+        time_str = time.strftime('-%H:%M:%S', time.localtime(int(time.time())))
+	name = name + time_str
         if wcai in j:
 	    j[wcai].append(name)
 	else:
