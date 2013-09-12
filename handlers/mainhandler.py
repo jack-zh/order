@@ -77,7 +77,7 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         c_list, c_str = back_cai_list()
         t_list, t_str = back_today_json()
-        self.render("index.html", c_str=c_str, t_str=t_str)
+        self.render("index.html", c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list)
 
     def post(self):
         j, s = back_today_json()
@@ -93,7 +93,7 @@ class MainHandler(tornado.web.RequestHandler):
         write_today_json(j)
         c_list, c_str = back_cai_list()
         t_list, t_str = back_today_json()
-        self.render("index.html", c_str=c_str, t_str=t_str)
+        self.render("index.html", c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list)
 
 
 class AddCaiHandler(tornado.web.RequestHandler):
@@ -119,7 +119,7 @@ class DelCaiHandler(tornado.web.RequestHandler):
 class ListCaiHandler(tornado.web.RequestHandler):
     def get(self):
         c_list, c_str = back_cai_list()
-        self.render("listc.html", c_list=c_list, c_str=c_str)
+        self.render("listc.html", c_list=c_list, c_str=c_str,)
 
 
 class HistoryHandler(tornado.web.RequestHandler):

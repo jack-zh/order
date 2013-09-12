@@ -2,7 +2,6 @@
 <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
     <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    </style>
     <script>
 	function trim(s){ 
 	    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
@@ -33,6 +32,15 @@
 
 
     </script>
+	<style>
+	    #chaptertree span{
+	     float:left;
+	     width:20%;
+	     margin:1px;
+	     padding:0;
+	     border: 2;
+	    }
+       </style>
 </head>
 <body>
 
@@ -45,14 +53,16 @@
     <table border="5">
 	<tr>
 	    <th>菜谱</th>
-	    <th>今日点餐情况</th>
 	</tr>
 	<tr>
 	    <td>
-    <pre>{{ c_str }}</pre>
-	    </td>
-	    <td>
-    <pre>{{ t_str }}</pre>
+			<div id="chaptertree">
+		    	{% for  c in c_list %}
+			<span>
+			{{ c }}:{{ c_list[c] }}
+		        </span>
+			{% end %}
+			</div>
 	    </td>
 	</tr>
     </table>
@@ -98,6 +108,35 @@
 			</tr>
 		    </table>
 		</form>
+	    </td>
+	    <td>
+              <table style="border-color:red" border="3">
+
+		  <tr>
+		      <th>菜名</th>
+		      <th>人数</th>
+		      <th>WHO列表</th>
+		  </tr>
+		  {% for  t in t_list %}
+		  <tr>
+		      <td>{{ t }}</td>
+		      <td>{{ len(t_list[t]) }}份</td>
+		      <td>
+         	      {% for  p in t_list[t] %}
+                       {{ p }}<span style="color:#ffffff">|</span>
+		      {% end %}
+		      </td>
+		  <tr>
+		  {% end %}
+
+
+
+
+
+	      </table>
+
+
+
 	    </td>
 	</tr>
     </table>

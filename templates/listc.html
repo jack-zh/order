@@ -31,6 +31,15 @@
 	    }
 
 	</script>
+	<style>
+	    #chaptertree span{
+	     float:left;
+	     width:20%;
+	     margin:1px;
+	     padding:0;
+	     border: 2;
+	    }
+       </style>
     </head>
     <body>
 
@@ -42,13 +51,15 @@
 	<div class="qingdan">
 	    <hr color=#aaaaaa >
 	    <table border="5">
-		<tr>
-		    <td>
-			<pre>
-    {{ c_str }}
-    </pre> 
-		    </td>
-		</tr>
+		<tr><td>
+			<div id="chaptertree">
+		    	{% for  c in c_list %}
+			<span>
+			{{ c }}:{{ c_list[c] }}
+		        </span>
+			{% end %}
+			</div>
+		    </td> </tr>
 	    </table>
 	    <hr color=#aaaaaa >
 	</div>
