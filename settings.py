@@ -6,5 +6,5 @@ log = {
     }
 }
 import os
-host_port = 8888 
+host_port = 8888
 data_dir = os.getcwd() + "/data/"
