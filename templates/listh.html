@@ -12,9 +12,24 @@
 	</div>
 	<div class="qingdan">
 	    <hr color=#aaaaaa >
-	    <pre>
-    {{ h_str }}
-    </pre> 
+              <table style="border-color:red" border="3">
+		  <tr>
+		      <th>菜名</th>
+		      <th>人数</th>
+		      <th>WHO列表</th>
+		  </tr>
+		  {% for  t in h_list %}
+		  <tr>
+		      <td>{{ t }}</td>
+		      <td>{{ len(h_list[t]) }}份</td>
+		      <td>
+         	      {% for  p in h_list[t] %}
+                       {{ p }}<span style="color:#ffffff">|</span>
+		      {% end %}
+		      </td>
+		  <tr>
+		  {% end %}
+	      </table>
 	    <hr color=#aaaaaa >
 	</div>
 
