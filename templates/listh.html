@@ -2,6 +2,20 @@
 <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>
     <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <script>
+	function trim(s){ 
+	    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+	}
+	function dk(){
+
+	    d_str = trim(document.getElementById("d_str").value)
+	    if (d_str == ""){
+		//alert("请输入姓名")
+		return false
+	    }
+	    return true
+	}
+	</script>
     </head>
     <body>
 
@@ -33,9 +47,9 @@
 	    <hr color=#aaaaaa >
 	</div>
 
-	<form action="/history" method="post">
+	<form onsubmit="return dk()" action="/history" method="post">
 	    <p>输入日期名称,格式(1970-01-01)</p>
-	    <p>日期: <input type="text" name="d_str" /></p>
+	    <p>日期: <input id="d_str" type="text" name="d_str" /></p>
 	    <input type="submit" value="Submit" />
 	</form>
 
