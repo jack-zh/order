@@ -30,20 +30,24 @@
 		  <tr>
 		      <th>菜名</th>
 		      <th>人数</th>
+		      <th>总价</th>
 		      <th>WHO列表</th>
 		  </tr>
 		  {% for  t in h_list %}
 		  <tr>
 		      <td>{{ t }}</td>
-		      <td>{{ len(h_list[t]) }}份</td>
+		      <td>{{ len(h_list[t]['who']) }}份</td>
+                      <td>{{ h_list[t]["allp"] }}</td>
 		      <td>
-         	      {% for  p in h_list[t] %}
+         	      {% for  p in h_list[t]['who'] %}
                        {{ p }}<span style="color:#ffffff">|</span>
 		      {% end %}
 		      </td>
 		  <tr>
 		  {% end %}
 	      </table>
+	    <hr color=#aaaaaa >
+            <p>总价:{{ dallp }}</p>
 	    <hr color=#aaaaaa >
 	</div>
 

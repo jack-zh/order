@@ -49,27 +49,35 @@ class TodayHandler(tornado.web.RequestHandler):
 
 class DelHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("del.html")
+        self.redirect('/')
 
     def post(self):
         name = self.get_argument("name")
-        j, s = back_today_json()
+        c_list, c_str = back_cai_list()
+        _a, s = back_today_json()
+        if "dallp" in _a:
+            j = _a["cai"]
+
         for c in j.keys():
             df = False
-            for n in j[c]:
+            for n in j[c]["who"]:
                 xf = False
                 if name == n[:len(name)]:
+                    price = get_price(c_list, c)
+                    j[c]["allp"] = j[c]["allp"] - price
+
                     xf = True
                     df = True
-                    j[c].remove(n)
-                    if len(j[c]) == 0:
+                    j[c]['who'].remove(n)
+                    if len(j[c]['who']) == 0:
                         j.pop(c)
+                    _a['dallp'] = _a['dallp'] - price
                 if xf:
                     break
             if df:
                 break
 
-        write_today_json(j)
+        write_today_json(_a)
         self.redirect('/')
 
 
@@ -77,48 +85,41 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         c_list, c_str = back_cai_list()
         t_list, t_str = back_today_json()
-        self.render("index.html", c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list)
+        if "dallp" not in t_list:
+            dallp = 0
+            cai = {}
+        else:
+            dallp = t_list['dallp']
+            cai = t_list["cai"]
+        self.render("index.html", dallp=dallp, c_str=c_str, t_str=t_str, c_list=c_list, t_list=cai)
 
     def post(self):
-        j, s = back_today_json()
+        _a, s = back_today_json()
         name = self.get_argument("name")
         wcai = self.get_argument("wcai")
         time_str = time.strftime('-%H:%M:%S', time.localtime(int(time.time())))
         name = name + time_str
         c_list, c_str = back_cai_list()
-        if wcai in j:
-            j[wcai]['who'].append(name)
-	    if wcai in c_list:
-		price = 0
-		try:
-		    price = int(c_list[wcai].split(u"元")[0])
-                except Exception, e:
-		    print e
-		    price = 0
-		j[wcai]['price'] = price
-	    else:
-		j[wcai]['price'] = 0
-	    j[wcai]['allp'] = len(j[wcai]['who']) * j[wcai]['price']
+        if "dallp" in _a:
+            price = 0
+            j = _a["cai"]
+            if wcai in j:
+                j[wcai]['who'].append(name)
+                price = get_price(c_list, wcai)
+                j[wcai]['price'] = price
+                j[wcai]['allp'] = len(j[wcai]['who']) * j[wcai]['price']
+            else:
+                price = get_price(c_list, wcai)
+                j[wcai] = {"price": price, "allp": price, "who": [name]}
+
+            _a["dallp"] = _a["dallp"] + price
         else:
-            j[wcai] = {}
-	    if wcai in c_list:
-		price = 0
-		try:
-		    price = int(c_list[wcai].split(u"元")[0])
-                except Exception, e:
-		    print e
-		    price = 0
-		j[wcai]['price'] = price
-		j[wcai]['allp'] = price
-	    else:
-		j[wcai]['price'] = 0
-		j[wcai]['allp'] = price
+            price = get_price(c_list, wcai)
+            _a = {"dallp": price, "cai": {wcai: {"price": price, "allp": price, "who": [name]}}}
 
-	    j[wcai]['who'] = [name]
-
-        write_today_json(j)
+        write_today_json(_a)
         t_list, t_str = back_today_json()
-        self.render("index.html", c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list)
+        self.render("index.html", dallp=t_list["dallp"], c_str=c_str, t_str=t_str, c_list=c_list, t_list=t_list["cai"])
 
 
 class AddCaiHandler(tornado.web.RequestHandler):
@@ -150,12 +151,26 @@ class ListCaiHandler(tornado.web.RequestHandler):
 class HistoryHandler(tornado.web.RequestHandler):
     def get(self):
         h_list, h_str = back_history_list("1970-01-01")
-        self.render("listh.html", h_list=h_list, h_str=h_str)
+        if "dallp" in h_list and "cai" in h_list and h_list["cai"] != {}:
+            cai = h_list["cai"]
+            dallp = h_list["dallp"]
+        else:
+            cai = {}
+            dallp = 0
+
+        self.render("listh.html", h_list=cai, dallp=dallp, h_str=h_str)
 
     def post(self):
         d_str = self.get_argument("d_str")
         h_list, h_str = back_history_list(d_str)
-        self.render("listh.html", h_list=h_list, h_str=h_str)
+        if "dallp" in h_list and "cai" in h_list and h_list["cai"] != {}:
+            cai = h_list["cai"]
+            dallp = h_list["dallp"]
+        else:
+            cai = {}
+            dallp = 0
+
+        self.render("listh.html", h_list=cai, dallp=dallp, h_str=h_str)
 
 
 class TongJiHandler(tornado.web.RequestHandler):
@@ -213,6 +228,17 @@ def write_today_json(j):
         fd = open(file_name, "wt")
         fd.write(json.dumps(j, indent=1, ensure_ascii=False))
         fd.close()
+
+
+def get_price(c_list, wcai):
+    price = 0
+    price = 0
+    if wcai in c_list:
+        try:
+            price = int(c_list[wcai].split(u"元")[0])
+        except Exception, e:
+            price = 0
+    return price
 
 
 def main():
