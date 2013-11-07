@@ -32,6 +32,7 @@ class Application(tornado.web.Application):
             (r"/delc", DelCaiHandler),
             (r"/listc", ListCaiHandler),
             (r"/history", HistoryHandler),
+            (r"/testqiniu", QiniuHandler),
             (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler, dict(path=STATIC_PATH))
         ]
         settings = dict(
@@ -140,6 +141,11 @@ class DelCaiHandler(tornado.web.RequestHandler):
             del(c_list[name])
             write_cai_list(c_list)
         self.redirect('/listc')
+
+
+class QiniuHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("qiniu.html")
 
 
 class ListCaiHandler(tornado.web.RequestHandler):
