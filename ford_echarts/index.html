@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <script src="static/js/jquery.min.js" type="text/javascript"></script>
+  <script src="static/data/data.js" type="text/javascript"></script> 
+  <title>Ford ECharts</title>
+ </head> 
+ <body>
+       <div class="datadiv" style="height:1600px;"> 
+        <div id="chart_installed_line1" style="width:100%; float:left; height:400px;"></div>
+        <div id="chart_installed_line2" style="width:100%; float:left; height:400px;"></div> 
+        <div id="chart_installed_line3" style="width:100%; float:left; height:400px;"></div> 
+        <div id="chart_installed_line4" style="width:100%; float:left; height:400px;"></div> 
+       </div>
+  <script src="static/js/echarts/esl.js"></script> 
+  <script>
+
+    require.config({
+        paths:{ 
+            echarts:'static/js/echarts/echarts',
+            'echarts/chart/pie':'static/js/echarts/echarts',
+            'echarts/chart/line':'static/js/echarts/echarts'
+        }
+    });
+    require(
+        [
+            'echarts',
+            'echarts/chart/pie',
+            'echarts/chart/line'
+        ],
+
+function (echarts) {
+
+    $( "#li_id_show").addClass("active");
+    
+    var myChart_installed_line1 = echarts.init(document.getElementById('chart_installed_line1'));
+
+    var myChart_installed_line2 = echarts.init(document.getElementById('chart_installed_line2'));
+
+    var myChart_installed_line3 = echarts.init(document.getElementById('chart_installed_line3'));
+
+    var myChart_installed_line4 = echarts.init(document.getElementById('chart_installed_line4'));
+
+    var xdata = data_from_log.xdata;
+    var BufferSize = data_from_log.BufferSize;
+
+    var xdata1 = data_from_log.xdata1;
+    var CreateTime = data_from_log.CreateTime;
+
+    var xdata2 = data_from_log.xdata2;
+    var FrameTime = data_from_log.FrameTime;
+
+    var xdata3 = data_from_log.xdata3;
+    var DrainEncodermOutputStream = data_from_log.DrainEncodermOutputStream;
+
+    c1_option = {
+        title:{
+            x:'center'
+        },
+        legend:{
+            data:['Buff size']
+        },
+        tooltip:{
+            trigger:'axis'
+        },
+        calculable:true,
+
+        toolbox:{
+            show:true,
+            feature:{
+                mark:{show:false},
+                dataView:{show:true, readOnly:false},
+                magicType:{show:true, type:['line', 'bar']},
+                restore:{show:true},
+                saveAsImage:{show:true}
+            }
+        },
+        dataZoom :{
+            show:true,
+            realtime:true,
+            start:0,
+            end:100
+        },
+        xAxis:[
+            {
+                type:'category',
+                boundaryGap:false,
+                data:xdata
+            }
+        ],
+        yAxis:[
+            {
+                type:'value',
+                axisLabel:{
+                    formatter:'{value}'
+                }
+            }
+        ],
+        series:[
+            {
+                name:'Buff size',
+                type:'bar',
+                data:BufferSize,
+                markPoint:{  
+                    data:[
+                        {
+                            type:'max', name:'最大值'
+                        },  
+                        {
+                            type:'min', name:'最小值'
+                        }
+                    ]
+                },  
+                markLine:{
+                    data:[
+                        {
+                            type:'average', name:'平均值'
+                        }
+                    ]
+                }
+            }
+        ]
+    };
+
+    c2_option = {
+        title:{
+            x:'center'
+        },
+        legend:{
+            data:['Create per frame time']
+        },
+        tooltip:{
+            trigger:'axis'
+        },
+        calculable:true,
+
+        toolbox:{
+            show:true,
+            feature:{
+                mark:{show:false},
+                dataView:{show:true, readOnly:false},
+                magicType:{show:true, type:['line', 'bar']},
+                restore:{show:true},
+                saveAsImage:{show:true}
+            }
+        },
+        calculable:true,
+        dataZoom :{
+            orient:"horizontal", // Y:vertical X:horizontal
+            show:true,
+            realtime:true,
+            start:0,
+            end:100
+        },
+        xAxis:[
+            {
+                type:'category',
+                boundaryGap:false,
+                data:xdata1
+            }
+        ],
+        yAxis:[
+            {
+                type:'value',
+                axisLabel:{
+                    formatter:'{value}'
+                }
+            }
+        ],
+        series:[
+            {
+                name:'Create per frame time',
+                type:'line',
+                data:CreateTime,
+                markPoint:{  
+                    data:[
+                        {
+                            type:'max',
+                            name:'最大值'                        
+                        },  
+                        {
+                            type:'min', name:'最小值'
+                        }
+                    ]
+                },  
+                markLine:{
+                    data:[
+                        {
+                            type:'average', name:'平均值'
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+	
+	c3_option = {
+        title:{
+            x:'center'
+        },
+        legend:{
+            data:['Frame to frame time']
+        },
+        tooltip:{
+            trigger:'axis'
+        },
+        calculable:true,
+
+        toolbox:{
+            show:true,
+            feature:{
+                mark:{show:false},
+                dataView:{show:true, readOnly:false},
+                magicType:{show:true, type:['line', 'bar']},
+                restore:{show:true},
+                saveAsImage:{show:true}
+            }
+        },
+        calculable:true,
+        dataZoom :{
+            orient:"horizontal", // Y:vertical X:horizontal
+            show:true,
+            realtime:true,
+            start:0,
+            end:100
+        },
+        xAxis:[
+            {
+                type:'category',
+                boundaryGap:false,
+                data:xdata2
+            }
+        ],
+        yAxis:[
+            {
+                type:'value',
+                axisLabel:{
+                    formatter:'{value}'
+                }
+            }
+        ],
+        series:[
+            {
+                name:'Frame to frame time',
+                type:'line',
+                data:FrameTime,
+                markPoint:{  
+                    data:[
+                        {
+                            type:'max',
+                            name:'最大值'                        
+                        },  
+                        {
+                            type:'min', name:'最小值'
+                        }
+                    ]
+                },  
+                markLine:{
+                    data:[
+                        {
+                            type:'average', name:'平均值'
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+
+
+    c4_option = {
+        title:{
+            x:'center'
+        },
+        legend:{
+            data:['Write time']
+        },
+        tooltip:{
+            trigger:'axis'
+        },
+        calculable:true,
+
+        toolbox:{
+            show:true,
+            feature:{
+                mark:{show:false},
+                dataView:{show:true, readOnly:false},
+                magicType:{show:true, type:['line', 'bar']},
+                restore:{show:true},
+                saveAsImage:{show:true}
+            }
+        },
+        calculable:true,
+        dataZoom :{
+            orient:"horizontal", // Y:vertical X:horizontal
+            show:true,
+            realtime:true,
+            start:0,
+            end:100
+        },
+        xAxis:[
+            {
+                type:'category',
+                boundaryGap:false,
+                data:xdata3
+            }
+        ],
+        yAxis:[
+            {
+                type:'value',
+                axisLabel:{
+                    formatter:'{value}'
+                }
+            }
+        ],
+        series:[
+            {
+                name:'Write time',
+                type:'line',
+                data:DrainEncodermOutputStream,
+                markPoint:{  
+                    data:[
+                        {
+                            type:'max',
+                            name:'最大值'                        
+                        },  
+                        {
+                            type:'min', name:'最小值'
+                        }
+                    ]
+                },  
+                markLine:{
+                    data:[
+                        {
+                            type:'average', name:'平均值'
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+	
+	
+    myChart_installed_line1.setOption(c1_option);
+    myChart_installed_line2.setOption(c2_option);
+	myChart_installed_line3.setOption(c3_option);
+    myChart_installed_line4.setOption(c4_option);
+
+    myChart_installed_line1.connect([myChart_installed_line2,myChart_installed_line3,myChart_installed_line4]);
+    myChart_installed_line2.connect([myChart_installed_line1,myChart_installed_line3,myChart_installed_line4]);
+    myChart_installed_line3.connect([myChart_installed_line2,myChart_installed_line1,myChart_installed_line4]);
+    myChart_installed_line4.connect([myChart_installed_line2,myChart_installed_line3,myChart_installed_line1]);
+
+    setTimeout(function (){
+        window.onresize = function () {
+            myChart_installed_line1.resize();
+            myChart_installed_line2.resize();
+			myChart_installed_line3.resize();
+            myChart_installed_line4.resize();
+        }
+    },200)
+})
+
+</script>  
+ </body>
+</html>
